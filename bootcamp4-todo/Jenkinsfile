@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Building Docker Image') {
               steps{
-              dir("cd bootcamp4-todo/backend/task-management"){
+              dir("bootcamp4-todo/backend/task-management"){
               script {
                          dockerImage = docker.build registry + ":$BUILD_NUMBER"
                        }
