@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+            registry = "docker.pkg.github.com/akhilanilm/Todo-App-Jenkins/user"
+            registryCredential = 'github-registry'
+            dockerImage=''
+          }
     stages {
         stage('Setup') {
             steps {
@@ -19,10 +24,24 @@ pipeline {
                     ISSUER_URI = "https://bootcamp-todo-user.us.auth0.com/"
                 }
             steps {
-                sh "echo ${POSTGRES_HOST}"
                 sh "pwd && ls"
                 sh "cd bootcamp4-todo/backend/task-management && mvn test"
                 sh "cd bootcamp4-todo/web-ui/ && npm run test"
+            }
+        }
+        stage('Building Docker Image') {
+              steps{
+              dir("cd bootcamp4-todo/web-ui/"){
+              script {
+                         dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                       }
+              }
+              }
+            }
+        stage('Deploy Docker Image to Dockerhub') {
+            steps{
+            sh 'docker login docker.pkg.github.com -u akhilanilm -p 7a73284661d22c7e2c6273b8589a94774230cbdc'
+            sh 'docker push '+registry+":$BUILD_NUMBER"
             }
         }
     }
