@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-            registry = "docker.pkg.github.com/akhilanilm/todo-app-jenkins/task-management"
+            frontendRegistry = "docker.pkg.github.com/akhilanilm/todo-app-jenkins/todo-client"
+            backendRegistry = "docker.pkg.github.com/akhilanilm/todo-app-jenkins/task-management"
             registryCredential = 'github-registry'
             dockerImage=''
           }
@@ -29,19 +30,34 @@ pipeline {
                 // sh "cd bootcamp4-todo/web-ui/ && npm run test"
             }
         }
-        stage('Building Docker Image') {
+        stage('Building Backend Docker Image') {
               steps{
               dir("bootcamp4-todo/backend/task-management"){
               script {
-                         dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                         dockerImage = docker.build backendRegistry + ":$BUILD_NUMBER"
                        }
               }
               }
             }
-        stage('Deploy Docker Image to Dockerhub') {
+        stage('Deploying Backend Docker Image to Dockerhub') {
             steps{
             sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
-            sh 'docker push '+registry+":$BUILD_NUMBER"
+            sh 'docker push '+backendRegistry+":$BUILD_NUMBER"
+            }
+        }
+        stage('Building Frontend Docker Image') {
+              steps{
+              dir("bootcamp4-todo/web-ui"){
+              script {
+                         dockerImage = docker.build frontendRegistry + ":$BUILD_NUMBER"
+                       }
+              }
+              }
+            }
+        stage('Deploying Frontend Docker Image to Dockerhub') {
+            steps{
+            sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
+            sh 'docker push '+frontendRegistry+":$BUILD_NUMBER"
             }
         }
     }
