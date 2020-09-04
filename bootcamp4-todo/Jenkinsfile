@@ -40,7 +40,7 @@ pipeline {
             }
         stage('Deploy Docker Image to Dockerhub') {
             steps{
-            sh 'docker login docker.pkg.github.com -u akhilanilm -p 7a73284661d22c7e2c6273b8589a94774230cbdc'
+            sh 'docker login docker.pkg.github.com -u akhilanilm -p ${GH_TOKEN}'
             sh 'docker push '+registry+":$BUILD_NUMBER"
             }
         }
