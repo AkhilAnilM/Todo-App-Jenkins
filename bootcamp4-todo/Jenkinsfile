@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-            registry = "docker.pkg.github.com/akhilanilm/Todo-App-Jenkins/user"
+            registry = "docker.pkg.github.com/akhilanilm/Todo-App-Jenkins/task-management"
             registryCredential = 'github-registry'
             dockerImage=''
           }
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Building Docker Image') {
               steps{
-              dir("cd bootcamp4-todo/web-ui/"){
+              dir("cd bootcamp4-todo/backend/task-management"){
               script {
                          dockerImage = docker.build registry + ":$BUILD_NUMBER"
                        }
