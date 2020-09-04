@@ -1,0 +1,32 @@
+timeout(time: 40, unit: 'MINUTES') {
+    node('master') {
+        try {
+            environment {
+                    POSTGRES_HOST = "postgres"
+                    POSTGRES_PORT = "5432"
+                    POSTGRES_DB = "tasks"
+                    POSTGRES_USER = "admin"
+                    POSTGRES_PASSWORD = "admin"
+                    API_IDENTIFIER = "https://bootcamp-todo-user.us.auth0.com/api/v2/"
+                    ISSUER_URI = "https://bootcamp-todo-user.us.auth0.com/"
+                }
+                
+            stage('Setup') {
+                checkout scm
+                sh "cd bootcamp4-todo && docker-compose up -d"
+            }
+
+            stage('Test') {
+                
+                    sh "echo ${POSTGRES_HOST}"
+                    sh "pwd && ls"
+                    sh "cd bootcamp4-todo/backend/task-management && mvn test"
+            }
+        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException fie) {
+            throw fie
+        } catch (e) {
+            throw e
+        } finally {
+        }
+    }
+}
