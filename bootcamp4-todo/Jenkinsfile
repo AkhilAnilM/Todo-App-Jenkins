@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-            registry = "docker.pkg.github.com/akhilanilm/Todo-App-Jenkins/task-management"
+            registry = "docker.pkg.github.com/akhilanilm/todo-app-jenkins/task-management"
             registryCredential = 'github-registry'
             dockerImage=''
           }
@@ -9,8 +9,8 @@ pipeline {
         stage('Setup') {
             steps {
                 checkout scm
-                sh "cd bootcamp4-todo && docker-compose up -d"
-                sh "cd bootcamp4-todo/web-ui/ && npm install"
+                // sh "cd bootcamp4-todo && docker-compose up -d"
+                // sh "cd bootcamp4-todo/web-ui/ && npm install"
             }
         }
         stage('Test') {
@@ -25,8 +25,8 @@ pipeline {
                 }
             steps {
                 sh "pwd && ls"
-                sh "cd bootcamp4-todo/backend/task-management && mvn test"
-                sh "cd bootcamp4-todo/web-ui/ && npm run test"
+                // sh "cd bootcamp4-todo/backend/task-management && mvn test"
+                // sh "cd bootcamp4-todo/web-ui/ && npm run test"
             }
         }
         stage('Building Docker Image') {
