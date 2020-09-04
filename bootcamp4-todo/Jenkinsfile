@@ -21,7 +21,7 @@ pipeline {
                 sh "echo ${POSTGRES_HOST}"
                 sh "pwd && ls"
                 sh "cd bootcamp4-todo/backend/task-management && mvn test"
-                sh "cd bootcamp4-todo/web-ui/ && npm run test --a"
+                sh "cd bootcamp4-todo/web-ui/ && npm run test"
             }
         }
     }
