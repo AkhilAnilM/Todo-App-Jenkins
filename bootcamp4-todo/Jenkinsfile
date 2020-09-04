@@ -5,6 +5,7 @@ pipeline {
             steps {
                 checkout scm
                 sh "cd bootcamp4-todo && docker-compose up -d"
+                sh "cd bootcamp4-todo/web-ui/ && npm install"
             }
         }
         stage('Test') {
