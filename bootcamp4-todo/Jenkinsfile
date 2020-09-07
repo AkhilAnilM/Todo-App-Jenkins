@@ -5,12 +5,12 @@ pipeline {
             backendRegistry = "docker.pkg.github.com/akhilanilm/todo-app-jenkins/task-management"
             registryCredential = 'github-registry'
             dockerImage=''
+            POSTGRES_USER = credentials('POSTGRES_USER')
           }
     stages {
         stage('Setup') {
             steps {
                 checkout scm
-                // sh "cd bootcamp4-todo && docker-compose up -d"
                 sh "cd bootcamp4-todo/backend/task-management && mvn -DskipTests clean package"
                 sh "cd bootcamp4-todo/web-ui/ && npm install"
             }
