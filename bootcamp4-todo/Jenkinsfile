@@ -11,10 +11,14 @@ pipeline {
             GH_TOKEN = credentials('GH_TOKEN')
           }
     stages {
-        stage('Setup') {
+        stage('Create task-management package') {
             steps {
                 checkout scm
                 sh "cd bootcamp4-todo/backend/task-management && mvn -DskipTests clean package"
+            }
+        }
+        stage('Install frontend dependencies') {
+            steps {
                 sh "cd bootcamp4-todo/web-ui/ && npm install"
             }
         }
@@ -26,7 +30,6 @@ pipeline {
                     ISSUER_URI = "https://bootcamp-todo-user.us.auth0.com/"
                 }
             steps {
-                sh "pwd && ls"
                 sh "cd bootcamp4-todo/backend/task-management && mvn test"
                 sh "cd bootcamp4-todo/web-ui/ && npm run test"
             }
@@ -40,12 +43,6 @@ pipeline {
               }
               }
             }
-        stage('Deploying Backend Docker Image to Dockerhub') {
-            steps{
-            sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
-            sh 'docker push '+backendRegistry+":$BUILD_NUMBER"
-            }
-        }
         stage('Building Frontend Docker Image') {
               steps{
               dir("bootcamp4-todo/web-ui"){
@@ -55,6 +52,12 @@ pipeline {
               }
               }
             }
+        stage('Deploying Backend Docker Image to Dockerhub') {
+            steps{
+            sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
+            sh 'docker push '+backendRegistry+":$BUILD_NUMBER"
+            }
+        }
         stage('Deploying Frontend Docker Image to Dockerhub') {
             steps{
             sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
