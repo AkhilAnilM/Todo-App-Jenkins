@@ -6,6 +6,9 @@ pipeline {
             registryCredential = 'github-registry'
             dockerImage=''
             POSTGRES_USER = credentials('POSTGRES_USER')
+            POSTGRES_PASSWORD = credentials('POSTGRES_PASSWORD')
+            POSTGRES_DB = credentials('POSTGRES_DB')
+            GH_TOKEN = credentials('GH_TOKEN')
           }
     stages {
         stage('Setup') {
