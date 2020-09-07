@@ -51,7 +51,7 @@ services:
     # env_file:
     #   - ./web-ui/.env
     environment:
-      - REACT_APP_BACKEND_HOST=http://localhost:8081
+      - REACT_APP_BACKEND_HOST=http://localhost:8080
     networks:
       - frontend
 volumes:
