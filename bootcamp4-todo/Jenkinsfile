@@ -52,13 +52,13 @@ pipeline {
               }
               }
             }
-        stage('Deploying Backend Docker Image to Dockerhub') {
+        stage('Deploying Backend Docker Image') {
             steps{
             sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
             sh 'docker push '+backendRegistry+":$BUILD_NUMBER"
             }
         }
-        stage('Deploying Frontend Docker Image to Dockerhub') {
+        stage('Deploying Frontend Docker Image') {
             steps{
             sh 'echo ${GH_TOKEN} | docker login docker.pkg.github.com -u akhilanilm --password-stdin'
             sh 'docker push '+frontendRegistry+":$BUILD_NUMBER"
